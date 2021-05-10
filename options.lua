@@ -156,419 +156,6 @@ sNamePlates.options = {
                 },
             },
         },  
-        font = {
-            type = "group",
-            name = "Font",
-            desc = "Configuration of the fonts.",
-            order = 5,
-            args = {
-                nameFontTitle = {
-                    type = "header",
-                    name = "Name",
-                    order = 1
-                },
-                nameToggle = {
-                    type = "toggle",
-                    name = "Enable",
-                    desc = "Name on the nameplates.",
-                    order = 2,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.nameToggle = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.nameToggle
-                    end,
-                },
-                nameFontSize = {
-                    type = "range",
-                    name = "Font Size",
-                    desc = "Font size of the name.",
-                    order = 3,
-                    min = 0,
-                    max= 30,
-                    step = 1,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.nameToggle 
-                    end,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.nameFontSize = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.nameFontSize
-                    end,
-                },
-                nameFont = {
-                    type = "select",
-                    name = "Font",
-                    desc = "The font used on the name.",
-                    order = 4,
-                    dialogControl = "LSM30_Font",
-                    values = AceGUIWidgetLSMlists.font,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.nameToggle 
-                    end,
-                    set = function(self,key)
-                        sNamePlates.db.profile.nameFont = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.nameFont
-                    end,
-                },
-                nameOutline  = {
-                    type = "select",
-                    name = "Outline",
-                    desc = "Outline of the name.",
-                    order = 5,
-                    values = {
-                        ["MONCROMEOUTLINE"] = "MONCROMEOUTLINE",
-                        ["NONE"] = "None",
-                        ["OUTLINE"] = "OUTLINE",
-                        ["THINOUTLINE"] = "THINOUTLINE",
-                        ["THICOUTLINE"] = "THICOUTLINE",
-                    },
-                    disabled = function() 
-                        return not sNamePlates.db.profile.nameToggle 
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.nameOutline = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.nameOutline
-                    end,
-                }, 
-                healthPercentFontTitle = {
-                    type = "header",
-                    name = "Health Percent",
-                    order = 6
-                },
-                healthPercentToggle = {
-                    type = "toggle",
-                    name = "Enable",
-                    desc = "Health percent on the nameplates.",
-                    order = 7,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.healthPercentToggle = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthPercentToggle
-                    end,
-                },
-                healthPercentFontSize = {
-                    type = "range",
-                    name = "Font Size",
-                    desc = "Font size of the health percent.",
-                    order = 8,
-                    min = 1,
-                    max= 30,
-                    step = 1,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthPercentToggle 
-                    end,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.healthPercentFontSize = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthPercentFontSize
-                    end,
-                },
-                healthPercentFont = {
-                    type = "select",
-                    name = "Font",
-                    desc = "The font used on the health percent.",
-                    order = 9,
-                    dialogControl = "LSM30_Font",
-                    values = AceGUIWidgetLSMlists.font,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthPercentToggle 
-                    end,
-                    set = function(self,key)
-                        sNamePlates.db.profile.healthPercentFont = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.healthPercentFont 
-                    end,
-                },
-                healthPercentOutline  = {
-                    type = "select",
-                    name = "Outline",
-                    desc = "Outline of the health percent.",
-                    order = 10,
-                    values = {
-                        ["MONCROMEOUTLINE"] = "MONCROMEOUTLINE",
-                        ["NONE"] = "None",
-                        ["OUTLINE"] = "OUTLINE",
-                        ["THINOUTLINE"] = "THINOUTLINE",
-                        ["THICOUTLINE"] = "THICOUTLINE",
-                    },
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthPercentToggle 
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.healthPercentOutline = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthPercentOutline
-                    end,
-                }, 
-                healthAmmountFontTitle = {
-                    type = "header",
-                    name = "Health Ammount",
-                    order = 11
-                },
-                healthAmmountToggle = {
-                    type = "toggle",
-                    name = "Enable",
-                    desc = "Health Ammount on the nameplates",
-                    order = 12,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.healthAmmountToggle = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthAmmountToggle
-                    end,
-                },
-                healthAmmountFontSize = {
-                    type = "range",
-                    name = "Font Size",
-                    desc = "Font size on the health ammount.",
-                    order = 13,
-                    min = 1,
-                    max= 30,
-                    step = 1,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthAmmountToggle 
-                    end,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.healthAmmountFontSize = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthAmmountFontSize
-                    end,
-                },
-                healthAmmountFont = {
-                    type = "select",
-                    name = "Font",
-                    desc = "The font used on the health ammount.",
-                    order = 14,
-                    dialogControl = "LSM30_Font",
-                    values = AceGUIWidgetLSMlists.font,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthAmmountToggle 
-                    end,
-                    set = function(self,key)
-                        sNamePlates.db.profile.healthAmmountFont = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.healthAmmountFont 
-                    end,
-                },
-                healthAmmountOutline  = {
-                    type = "select",
-                    name = "Outline",
-                    desc = "Outline of the health ammount.",
-                    order = 15,
-                    values = {
-                        ["MONCROMEOUTLINE"] = "MONCROMEOUTLINE",
-                        ["NONE"] = "None",
-                        ["OUTLINE"] = "OUTLINE",
-                        ["THINOUTLINE"] = "THINOUTLINE",
-                        ["THICOUTLINE"] = "THICOUTLINE",
-                    },
-                    disabled = function() 
-                        return not sNamePlates.db.profile.healthAmmountToggle 
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.healthAmmountOutline = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.healthAmmountOutline
-                    end,
-                }, 
-                infoIfFullTitle = {
-                    type = "header",
-                    name = "Display",
-                    order = 16
-                },
-                infoIfFullSelect = {
-                    type = "select",
-                    name = "Full health",
-                    desc = "Display health ammount or health percent or both if the nameplate is full hp.",
-                    order = 17,
-                    width = "normal",
-                    values = {
-                        [false] = "No",
-                        [true] = "Yes",
-                    },
-                    disabled = function() 
-                        return not (sNamePlates.db.profile.healthAmmountToggle or sNamePlates.db.profile.healthPercentToggle)
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.infoIfFullSelect = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.infoIfFullSelect
-                    end,
-                },
-                levelFontTitle = {
-                    type = "header",
-                    name = "Level",
-                    order = 18,
-                    disabled = true,
-                    hidden = true,
-                },
-                levelToggle = {
-                    type = "toggle",
-                    name = "Enable",
-                    desc = "Level on the nameplates.",
-                    order = 19,
-                    disabled = true,
-                    hidden = true,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.levelToggle = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.levelToggle
-                    end,
-                },
-                levelFontSize = {
-                    type = "range",
-                    name = "Font Size",
-                    desc = "Font size of the level.",
-                    order = 20,
-                    min = 0,
-                    max= 30,
-                    step = 1,
-                    disabled = true,
-                    hidden = true,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.levelToggle 
-                    end,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.levelFontSize = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.levelFontSize
-                    end,
-                },
-                levelFont = {
-                    type = "select",
-                    name = "Font",
-                    desc = "The font used on the level.",
-                    order = 21,
-                    disabled = true,
-                    hidden = true,
-                    dialogControl = "LSM30_Font",
-                    values = AceGUIWidgetLSMlists.font,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.levelToggle 
-                    end,
-                    set = function(self,key)
-                        sNamePlates.db.profile.levelFont = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.levelFont 
-                    end,
-                },
-                levelOutline = {
-                    type = "select",
-                    name = "Outline",
-                    desc = "Outline of the level.",
-                    order = 22,
-                    disabled = true,
-                    hidden = true,
-                    values = {
-                        ["MONCROMEOUTLINE"] = "MONCROMEOUTLINE",
-                        ["NONE"] = "None",
-                        ["OUTLINE"] = "OUTLINE",
-                        ["THINOUTLINE"] = "THINOUTLINE",
-                        ["THICOUTLINE"] = "THICOUTLINE",
-                    },
-                    disabled = function() 
-                        return not sNamePlates.db.profile.levelToggle 
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.levelOutline = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.levelOutline
-                    end,
-                },
-                castbarFontTitle = {
-                    type = "header",
-                    name = "Castbar",
-                    order = 23
-                },
-                castbarFontToggle = {
-                    type = "toggle",
-                    name = "Enable",
-                    desc = "Font on the castbar.",
-                    order = 24,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.castbarFontToggle = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.castbarFontToggle
-                    end,
-                },
-                castbarFontSize = {
-                    type = "range",
-                    name = "Font Size",
-                    desc = "Font size of the castbar elements.",
-                    order = 25,
-                    min = 8,
-                    max= 20,
-                    step = 1,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.castbarFontToggle
-                    end,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.castbarFontSize = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.castbarFontSize
-                    end,
-                },
-                castbarFont = {
-                    type = "select",
-                    name = "Font",
-                    desc = "The font used on the castbar elements.",
-                    order = 26,
-                    dialogControl = "LSM30_Font",
-                    values = AceGUIWidgetLSMlists.font,
-                    disabled = function() 
-                        return not sNamePlates.db.profile.castbarFontToggle 
-                    end,
-                    set = function(self,key)
-                        sNamePlates.db.profile.castbarFont = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.castbarFont 
-                    end,
-                },
-                castbarFontOutline = {
-                    type = "select",
-                    name = "Outline",
-                    desc = "Outline of the castbar elements.",
-                    order = 27,
-                    values = {
-                        ["MONCROMEOUTLINE"] = "MONCROMEOUTLINE",
-                        ["NONE"] = "None",
-                        ["OUTLINE"] = "OUTLINE",
-                        ["THINOUTLINE"] = "THINOUTLINE",
-                        ["THICOUTLINE"] = "THICOUTLINE",
-                    },
-                    disabled = function() 
-                        return not sNamePlates.db.profile.castbarFontToggle
-                    end,
-                    set = function(info, val) 
-                        sNamePlates.db.profile.castbarFontOutline = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.castbarFontOutline
-                    end,
-                },
-            },
-        },
         target = {
             type = "group",
             name = "Target",
@@ -641,7 +228,8 @@ sNamePlates.options = {
                         [5] = "Arrow Thin",
                         [6] = "Bracket",
                         [7] = "Bracket Thin",
-                        --[3] = "Hello Kitty",
+                        [8] = "Single Arrow",
+                        [9] = "Hello Kitty",
                     },
                     disabled = function() 
                         return not sNamePlates.db.profile.tarIndicatorToggle
@@ -784,6 +372,759 @@ sNamePlates.options = {
                     end,
                     get = function(info) 
                         return sNamePlates.db.profile.scaleValue 
+                    end,
+                },
+            },
+        },
+        castbar = {
+            type = "group",
+            name = "Castbar",
+            desc = "Configuration of the castbar on the target.",
+            order = 3,
+            args = {
+                castbarToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Show a castbar on the nameplates.",
+                    order = 1,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.castbarToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castbarToggle
+                    end,
+                },
+                cbSizeTitle = {
+                    type = "header",
+                    name = "General",
+                    order = 2,
+                },
+                cbSizeTitle = {
+                    type = "header",
+                    name = "Size",
+                    order = 3,
+                },
+                castbarHeight = {
+                    type = "range",
+                    name = "Height",
+                    desc = "The height of the castbar.",
+                    order = 4,
+                    min = 1,
+                    max= 15,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castbarHeight = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castbarHeight 
+                    end,
+                },
+                castbarSizeTitle = {
+                    type = "header",
+                    name = "Texture",
+                    order = 10,
+                },
+                castbarTexture = {
+                    type = "select",
+                    name = "Castbar Texture",
+                    desc = "The texture used by the castbar.",
+                    order = 11,
+                    width = 'normal',
+                    dialogControl = "LSM30_Statusbar",
+                    values = AceGUIWidgetLSMlists.statusbar,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.castbarTexture = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.castbarTexture
+                    end,
+                },
+                castbarBackgroundTexture = {
+                    type = "select",
+                    name = "Background Texture",
+                    desc = "The texture used by the castbar's background.",
+                    order = 12,
+                    width = 'normal',
+                    dialogControl = "LSM30_Statusbar",
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    values = AceGUIWidgetLSMlists.statusbar,
+                    set = function(self,key)
+                        sNamePlates.db.profile.castbarBackgroundTexture = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.castbarBackgroundTexture
+                    end,
+                },
+                namePositionTitle = {
+                    type = "header",
+                    name = "Name Position",
+                    order = 40,
+                },
+                castNameXOffset = {
+                    type = "range",
+                    name = "X Offset",
+                    desc = "Position of the cast name in the x-axis.",
+                    order = 41,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castNameXOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castNameXOffset 
+                    end,
+                },
+                castNameYOffset = {
+                    type = "range",
+                    name = "Y Offset",
+                    desc = "Position of the cast name in the y-axis.",
+                    order = 42,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castNameYOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castNameYOffset 
+                    end,
+                },
+                timePositionTitle = {
+                    type = "header",
+                    name = "Time Position",
+                    order = 60,
+                },
+                castTimeXOffset = {
+                    type = "range",
+                    name = "X Offset",
+                    desc = "Position of the cast time in the x-axis.",
+                    order = 61,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castTimeXOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castTimeXOffset
+                    end,
+                },
+                castTimeYOffset = {
+                    type = "range",
+                    name = "Y Offset",
+                    desc = "Position of the cast time in the y-axis.",
+                    order = 62,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castTimeYOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castTimeYOffset
+                    end,
+                },
+            },
+        },   
+        raidIcon = {
+            type = "group",
+            name = "Raid icon",
+            desc = "Configuration of the raid icon.",
+            order = 4,
+            args = {
+                RIsizeTitle = {
+                    type = "header",
+                    name = "Size",
+                    order = 1,
+                },
+                RIwidth = {
+                    type = "range",
+                    name = "Width",
+                    desc = "The width of the raid icon.",
+                    order = 2,
+                    min = 5,
+                    max= 70,
+                    step = 1,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.RIwidth  = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.RIwidth 
+                    end,
+                },
+                RIheight = {
+                    type = "range",
+                    name = "Height",
+                    desc = "The height of the raid icon.",
+                    order = 3,
+                    min = 5,
+                    max= 70,
+                    step = 1,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.RIheight = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.RIheight 
+                    end,
+                },
+                RIpositionTitle = {
+                    type = "header",
+                    name = "Position",
+                    order = 6,
+                },
+                RIXOffset = {
+                    type = "range",
+                    name = "X Offset",
+                    desc = "Position of the raid icon in the x-axis.",
+                    order = 7,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.RIXOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.RIXOffset
+                    end,
+                },
+                RIYOffset = {
+                    type = "range",
+                    name = "Y Offset",
+                    desc = "Position of the raid icon in the y-axis.",
+                    order = 8,
+                    min = -500,
+                    max= 500,
+                    step = 1,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.RIYOffset = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.RIYOffset
+                    end,
+                },            
+            },
+        },   
+        font = {
+            type = "group",
+            name = "Font",
+            desc = "Configuration of the fonts.",
+            order = 5,
+            args = {
+                nameFontTitle = {
+                    type = "header",
+                    name = "Name",
+                    order = 1
+                },
+                nameToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Name on the nameplates.",
+                    order = 2,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.nameToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.nameToggle
+                    end,
+                },
+                nameFontSize = {
+                    type = "range",
+                    name = "Font Size",
+                    desc = "Font size of the name.",
+                    order = 3,
+                    min = 1,
+                    max= 30,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.nameToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.nameFontSize = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.nameFontSize
+                    end,
+                },
+                nameFont = {
+                    type = "select",
+                    name = "Font",
+                    desc = "The font used on the name.",
+                    order = 4,
+                    dialogControl = "LSM30_Font",
+                    values = AceGUIWidgetLSMlists.font,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.nameToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.nameFont = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.nameFont
+                    end,
+                },
+                nameOutline  = {
+                    type = "select",
+                    name = "Outline",
+                    desc = "Outline of the name.",
+                    order = 5,
+                    values = {
+                        ["MONOCHROMEOUTLINE"] = "MONOCHROMEOUTLINE",
+                        ["MONOCHROME"] = "MONOCHROME",
+                        ["NONE"] = "None",
+                        ["OUTLINE"] = "OUTLINE",
+                        ["THICKOUTLINE"] = "THICKOUTLINE",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.nameToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.nameOutline = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.nameOutline
+                    end,
+                }, 
+                shNameSelect = {
+                    type = "select",
+                    name = "Shadow",
+                    desc = "Display shadow under the name.",
+                    order = 6,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.nameToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.shNameSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.shNameSelect
+                    end,
+                },
+                healthPercentFontTitle = {
+                    type = "header",
+                    name = "Health Percent",
+                    order = 20
+                },
+                healthPercentToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Health percent on the nameplates.",
+                    order = 21,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.healthPercentToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthPercentToggle
+                    end,
+                },
+                healthPercentFontSize = {
+                    type = "range",
+                    name = "Font Size",
+                    desc = "Font size of the health percent.",
+                    order = 22,
+                    min = 1,
+                    max= 30,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthPercentToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.healthPercentFontSize = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthPercentFontSize
+                    end,
+                },
+                healthPercentFont = {
+                    type = "select",
+                    name = "Font",
+                    desc = "The font used on the health percent.",
+                    order = 23,
+                    dialogControl = "LSM30_Font",
+                    values = AceGUIWidgetLSMlists.font,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthPercentToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.healthPercentFont = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.healthPercentFont 
+                    end,
+                },
+                healthPercentOutline  = {
+                    type = "select",
+                    name = "Outline",
+                    desc = "Outline of the health percent.",
+                    order = 24,
+                    values = {
+                        ["MONOCHROMEOUTLINE"] = "MONOCHROMEOUTLINE",
+                        ["MONOCHROME"] = "MONOCHROME",
+                        ["NONE"] = "None",
+                        ["OUTLINE"] = "OUTLINE",
+                        ["THICKOUTLINE"] = "THICKOUTLINE",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthPercentToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.healthPercentOutline = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthPercentOutline
+                    end,
+                }, 
+                shHealthPercentSelect = {
+                    type = "select",
+                    name = "Shadow",
+                    desc = "Display shadow under the health percent.",
+                    order = 25,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthPercentToggle  
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.shHealthPercentSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.shHealthPercentSelect
+                    end,
+                },
+                healthAmmountFontTitle = {
+                    type = "header",
+                    name = "Health Ammount",
+                    order = 40
+                },
+                healthAmmountToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Health Ammount on the nameplates",
+                    order = 41,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.healthAmmountToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthAmmountToggle
+                    end,
+                },
+                healthAmmountFontSize = {
+                    type = "range",
+                    name = "Font Size",
+                    desc = "Font size on the health ammount.",
+                    order = 42,
+                    min = 1,
+                    max= 30,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthAmmountToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.healthAmmountFontSize = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthAmmountFontSize
+                    end,
+                },
+                healthAmmountFont = {
+                    type = "select",
+                    name = "Font",
+                    desc = "The font used on the health ammount.",
+                    order = 43,
+                    dialogControl = "LSM30_Font",
+                    values = AceGUIWidgetLSMlists.font,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthAmmountToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.healthAmmountFont = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.healthAmmountFont 
+                    end,
+                },
+                healthAmmountOutline  = {
+                    type = "select",
+                    name = "Outline",
+                    desc = "Outline of the health ammount.",
+                    order = 44,
+                    values = {
+                        ["MONOCHROMEOUTLINE"] = "MONOCHROMEOUTLINE",
+                        ["MONOCHROME"] = "MONOCHROME",
+                        ["NONE"] = "None",
+                        ["OUTLINE"] = "OUTLINE",
+                        ["THICKOUTLINE"] = "THICKOUTLINE",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthAmmountToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.healthAmmountOutline = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.healthAmmountOutline
+                    end,
+                }, 
+                shHealthAmmountSelect = {
+                    type = "select",
+                    name = "Shadow",
+                    desc = "Display shadow under the health ammount.",
+                    order = 45,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.healthAmmountToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.shHealthAmmountSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.shHealthAmmountSelect
+                    end,
+                },
+                infoIfFullTitle = {
+                    type = "header",
+                    name = "Display",
+                    order = 60
+                },
+                infoIfFullSelect = {
+                    type = "select",
+                    name = "Full health",
+                    desc = "Display health ammount or health percent or both if the nameplate is full hp.",
+                    order = 61,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not (sNamePlates.db.profile.healthAmmountToggle or sNamePlates.db.profile.healthPercentToggle)
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.infoIfFullSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.infoIfFullSelect
+                    end,
+                },
+                levelFontTitle = {
+                    type = "header",
+                    name = "Level",
+                    order = 80,
+                },
+                levelToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Level on the nameplates.",
+                    order = 81,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.levelToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.levelToggle
+                    end,
+                },
+                levelFontSize = {
+                    type = "range",
+                    name = "Font Size",
+                    desc = "Font size of the level.",
+                    order = 82,
+                    min = 1,
+                    max= 30,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.levelToggle 
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.levelFontSize = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.levelFontSize
+                    end,
+                },
+                levelFont = {
+                    type = "select",
+                    name = "Font",
+                    desc = "The font used on the level.",
+                    order = 83,
+                    dialogControl = "LSM30_Font",
+                    values = AceGUIWidgetLSMlists.font,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.levelToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.levelFont = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.levelFont 
+                    end,
+                },
+                levelOutline = {
+                    type = "select",
+                    name = "Outline",
+                    desc = "Outline of the level.",
+                    order = 84,
+                    values = {
+                        ["MONOCHROMEOUTLINE"] = "MONOCHROMEOUTLINE",
+                        ["MONOCHROME"] = "MONOCHROME",
+                        ["NONE"] = "None",
+                        ["OUTLINE"] = "OUTLINE",
+                        ["THICKOUTLINE"] = "THICKOUTLINE",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.levelToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.levelOutline = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.levelOutline
+                    end,
+                },
+                shLevelSelect = {
+                    type = "select",
+                    name = "Shadow",
+                    desc = "Display shadow under the level.",
+                    order = 85,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.levelToggle 
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.shLevelSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.shLevelSelect
+                    end,
+                },
+
+                castbarFontTitle = {
+                    type = "header",
+                    name = "Castbar",
+                    order = 100
+                },
+                castbarFontToggle = {
+                    type = "toggle",
+                    name = "Enable",
+                    desc = "Font on the castbar.",
+                    order = 101,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.castbarFontToggle = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castbarFontToggle
+                    end,
+                },
+                castbarFontSize = {
+                    type = "range",
+                    name = "Font Size",
+                    desc = "Font size of the castbar elements.",
+                    order = 102,
+                    min = 1,
+                    max= 20,
+                    step = 1,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarFontToggle
+                    end,
+                    set = function(info,val) 
+                        sNamePlates.db.profile.castbarFontSize = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castbarFontSize
+                    end,
+                },
+                castbarFont = {
+                    type = "select",
+                    name = "Font",
+                    desc = "The font used on the castbar elements.",
+                    order = 103,
+                    dialogControl = "LSM30_Font",
+                    values = AceGUIWidgetLSMlists.font,
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarFontToggle 
+                    end,
+                    set = function(self,key)
+                        sNamePlates.db.profile.castbarFont = key
+                    end,
+                    get = function()
+                        return sNamePlates.db.profile.castbarFont 
+                    end,
+                },
+                castbarFontOutline = {
+                    type = "select",
+                    name = "Outline",
+                    desc = "Outline of the castbar elements.",
+                    order = 104,
+                    values = {
+                        ["MONOCHROMEOUTLINE"] = "MONOCHROMEOUTLINE",
+                        ["MONOCHROME"] = "MONOCHROME",
+                        ["NONE"] = "None",
+                        ["OUTLINE"] = "OUTLINE",
+                        ["THICKOUTLINE"] = "THICKOUTLINE",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarFontToggle
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.castbarFontOutline = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.castbarFontOutline
+                    end,
+                },
+                shCastbarSelect = {
+                    type = "select",
+                    name = "Shadow",
+                    desc = "Display shadow under the castbar text.",
+                    order = 105,
+                    width = "normal",
+                    values = {
+                        [false] = "No",
+                        [true] = "Yes",
+                    },
+                    disabled = function() 
+                        return not sNamePlates.db.profile.castbarFontToggle
+                    end,
+                    set = function(info, val) 
+                        sNamePlates.db.profile.shCastbarSelect = val 
+                    end,
+                    get = function(info) 
+                        return sNamePlates.db.profile.shCastbarSelect 
                     end,
                 },
             },
@@ -1092,145 +1433,49 @@ sNamePlates.options = {
                         sNamePlates:RTIColors()
                     end, 
                 },   
-                
+                CBColorTitle = {
+                    type = "header",
+                    name = "Castbar Color",
+                    order = 100,
+                },
+                CBColorInterruptible = {
+                    type = "color",
+                    name = "interruptible",
+                    order = 101,
+                    hasAlpha = true,
+                    set = function(info, r, g, b, a)
+                        sNamePlates.db.profile.CBColorInterruptible = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
+                    end,
+                    get = function(info, r, g, b, a) 
+                        local c = sNamePlates.db.profile.CBColorInterruptible
+					    return c.r, c.g, c.b, c.a      
+                    end,
+                },
+                CBColorNotInterruptible = {
+                    type = "color",
+                    name = "Not Interruptible",
+                    order = 102,
+                    hasAlpha = true,
+                    set = function(info, r, g, b, a)
+                        sNamePlates.db.profile.CBColorNotInterruptible = {["r"] = r, ["g"] = g, ["b"] = b, ["a"] = a}
+                    end,
+                    get = function(info, r, g, b, a) 
+                        local c = sNamePlates.db.profile.CBColorNotInterruptible
+					    return c.r, c.g, c.b, c.a      
+                    end,
+                },
+                CBColorExecute = {
+                    type = "execute",
+                    name = "Reset",
+                    desc = "Reset castbar colors.",
+                    order = 103,
+                    width = "full",
+                    confirm = function()
+                        sNamePlates:RCBColors()
+                    end, 
+                },
             },
         }, 
-        castbar = {
-            type = "group",
-            name = "Castbar",
-            desc = "Configuration of the castbar on the target.",
-            order = 3,
-            args = {
-                castbarSizeTitle = {
-                    type = "header",
-                    name = "Size",
-                    order = 1,
-                },
-                castbarHeight = {
-                    type = "range",
-                    name = "Height",
-                    desc = "The height of the castbar.",
-                    order = 2,
-                    min = 3,
-                    max= 15,
-                    step = 1,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.castbarHeight = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.castbarHeight 
-                    end,
-                },
-                castbarTexture = {
-                    type = "select",
-                    name = "Castbar Texture",
-                    desc = "The texture used by the castbar.",
-                    order = 3,
-                    width = 'normal',
-                    dialogControl = "LSM30_Statusbar",
-                    values = AceGUIWidgetLSMlists.statusbar,
-                    set = function(self,key)
-                        sNamePlates.db.profile.castbarTexture = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.castbarTexture
-                    end,
-                },
-                castbarBackgroundTexture = {
-                    type = "select",
-                    name = "Background Texture",
-                    desc = "The texture used by the castbar's background.",
-                    order = 4,
-                    width = 'normal',
-                    dialogControl = "LSM30_Statusbar",
-                    values = AceGUIWidgetLSMlists.statusbar,
-                    set = function(self,key)
-                        sNamePlates.db.profile.castbarBackgroundTexture = key
-                    end,
-                    get = function()
-                        return sNamePlates.db.profile.castbarBackgroundTexture
-                    end,
-                },
-            },
-        },   
-        raidIcon = {
-            type = "group",
-            name = "Raid icon",
-            desc = "Configuration of the raid icon.",
-            order = 4,
-            args = {
-                RIsizeTitle = {
-                    type = "header",
-                    name = "Size",
-                    order = 1,
-                },
-                RIwidth = {
-                    type = "range",
-                    name = "Width",
-                    desc = "The width of the raid icon.",
-                    order = 2,
-                    min = 5,
-                    max= 70,
-                    step = 1,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.RIwidth  = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.RIwidth 
-                    end,
-                },
-                RIheight = {
-                    type = "range",
-                    name = "Height",
-                    desc = "The height of the raid icon.",
-                    order = 3,
-                    min = 5,
-                    max= 70,
-                    step = 1,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.RIheight = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.RIheight 
-                    end,
-                },
-                RIpositionTitle = {
-                    type = "header",
-                    name = "Position",
-                    order = 6,
-                },
-                RIXOffset = {
-                    type = "range",
-                    name = "X Offset",
-                    desc = "Position of the raid icon in the x-axis.",
-                    order = 7,
-                    min = -500,
-                    max= 500,
-                    step = 1,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.RIXOffset = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.RIXOffset
-                    end,
-                },
-                RIYOffset = {
-                    type = "range",
-                    name = "Y Offset",
-                    desc = "Position of the raid icon in the y-axis.",
-                    order = 8,
-                    min = -500,
-                    max= 500,
-                    step = 1,
-                    set = function(info,val) 
-                        sNamePlates.db.profile.RIYOffset = val 
-                    end,
-                    get = function(info) 
-                        return sNamePlates.db.profile.RIYOffset
-                    end,
-                },            
-            },
-        },   
     },
 }
 
@@ -1249,34 +1494,6 @@ sNamePlates.defaults = {
 
         separationValue = 4,
 
-        --Font
-        nameToggle = true,
-        nameFontSize = 13, 
-        nameFont = "Continuum Medium",
-        nameOutline = "THINOUTLINE",
-
-        healthPercentToggle = true,
-        healthPercentFontSize = 13, 
-        healthPercentFont = "Continuum Medium",
-        healthPercentOutline = "THINOUTLINE",
-
-        healthAmmountToggle = true,
-        healthAmmountFontSize = 13, 
-        healthAmmountFont = "Continuum Medium",
-        healthAmmountOutline = "THINOUTLINE",
-
-        infoIfFullSelect = true,
-
-        levelToggle = true,
-        levelFontSize = 13, 
-        levelFont = "Continuum Medium",
-        levelOutline = "THINOUTLINE",
-
-        castbarFontToggle = true,
-        castbarFontSize = 13,
-        castbarFont = "Continuum Medium",
-        castbarFontOutline = "THINOUTLINE",
-
         --Target
         alphaToggle = false,
         alphaValue = 0.3,
@@ -1291,6 +1508,57 @@ sNamePlates.defaults = {
 
         scaleToggle = false,
         scaleValue = 1,
+
+        --Castbar
+        castbarToggle = true,
+        castbarHeight = 6,
+        castbarTexture = "Armory",
+        castbarBackgroundTexture = "Armory",
+
+        castNameXOffset = -2,
+        castNameYOffset = -12, 
+
+        castTimeXOffset = 2,
+        castTimeYOffset = -12,
+
+        --Raid Icon
+        RIwidth = 35,
+        RIheight = 35,
+        RIXOffset = 88,
+        RIYOffset = 28,
+
+        --Font
+        nameToggle = true,
+        nameFontSize = 13, 
+        nameFont = "Continuum Medium",
+        nameOutline = "OUTLINE",
+        shNameSelect = false,
+
+        healthPercentToggle = true,
+        healthPercentFontSize = 13, 
+        healthPercentFont = "Continuum Medium",
+        healthPercentOutline = "OUTLINE",
+        shHealthPercentSelect = false,
+
+        healthAmmountToggle = true,
+        healthAmmountFontSize = 13, 
+        healthAmmountFont = "Continuum Medium",
+        healthAmmountOutline = "OUTLINE",
+        shHealthAmmountSelect = false,
+
+        infoIfFullSelect = true,
+
+        levelToggle = true,
+        levelFontSize = 13, 
+        levelFont = "Continuum Medium",
+        levelOutline = "OUTLINE",
+        shLevelSelect = false,
+
+        castbarFontToggle = true,
+        castbarFontSize = 13,
+        castbarFont = "Continuum Medium",
+        castbarFontOutline = "OUTLINE",
+        shCastbarSelect = false,
 
         --Color
         pvpFlaggedColor = {["r"] = 0, ["g"] = 1, ["b"] = 0, ["a"] = 1},
@@ -1315,15 +1583,7 @@ sNamePlates.defaults = {
 
         TIColor = {["r"] = 1, ["g"] = 1, ["b"] = 1, ["a"] = 1},
 
-        --Castbar
-        castbarHeight = 6,
-        castbarTexture = "Armory",
-        castbarBackgroundTexture = "Armory",
-
-        --Raid Icon
-        RIwidth = 35,
-        RIheight = 35,
-        RIXOffset = 88,
-        RIYOffset = 28,
+        CBColorInterruptible = {["r"] = 0.85, ["g"] = 0.61, ["b"] = 0.15, ["a"] = 1},
+        CBColorNotInterruptible = {["r"] = 0.8, ["g"] = 0.1, ["b"] = 0.1, ["a"] = 1},
     }
 }
