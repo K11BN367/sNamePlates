@@ -14,9 +14,6 @@ local unpack = unpack
 local createdFrames = {}
 local targetExist
 
-local cchProgress = 0
-local cchDuration = 0
-
 local mode = CreateFrame("Frame")
 local function setTimer(duration, func)
 	local endTime = GetTime() + duration;
@@ -136,38 +133,16 @@ function sNamePlates:ChatCommand(input)
     self:OpenOptions()
 end
 
-local function sNamePlates_CBSetValue(self, key)
-	local name, _, _, texture, startTime, endTime, _, castID, notInterruptible = 0
-	if key == "channel" then
-        name, _, _, texture, startTime, endTime, _, castID, notInterruptible, spellID = UnitChannelInfo("target")
-		cchDuration = (endTime-startTime)/1000
-		cchProgress = format("%.2f",endTime/1000 - GetTime())
-		self.castbar:SetMinMaxValues(0, cchDuration)
-		self.castbar:SetValue(cchProgress)
-		self.castbar.cbTime:SetText(cchProgress)
-		self.castbar.cbName:SetText(name)
-		if not notInterruptible then
-			self.castbar:SetStatusBarColor(sNamePlates.db.profile.CBColorInterruptible.r, sNamePlates.db.profile.CBColorInterruptible.g, sNamePlates.db.profile.CBColorInterruptible.b, sNamePlates.db.profile.CBColorInterruptible.a)
-		else
-			self.castbar:SetStatusBarColor(sNamePlates.db.profile.CBColorNotInterruptible.r, sNamePlates.db.profile.CBColorNotInterruptible.g, sNamePlates.db.profile.CBColorNotInterruptible.b, sNamePlates.db.profile.CBColorNotInterruptible.a)
-		end
-		self.castbarIcon.Texture:SetTexture(texture)
-		self.castbar:Show()
-    elseif key == "cast" then
-        name, _, _, texture, startTime, endTime, _, castID, notInterruptible, spellID = UnitCastingInfo("target")
-		cchDuration = (endTime-startTime)/1000
-		cchProgress = format("%.2f", cchDuration-(endTime/1000 - GetTime()))
-		self.castbar:SetMinMaxValues(0, cchDuration)
-		self.castbar:SetValue(cchProgress)
-		self.castbar.cbTime:SetText(cchProgress)
-		self.castbar.cbName:SetText(name)
-		if  not notInterruptible then
-			self.castbar:SetStatusBarColor(sNamePlates.db.profile.CBColorInterruptible.r, sNamePlates.db.profile.CBColorInterruptible.g, sNamePlates.db.profile.CBColorInterruptible.b, sNamePlates.db.profile.CBColorInterruptible.a)
-		else
-			self.castbar:SetStatusBarColor(sNamePlates.db.profile.CBColorNotInterruptible.r, sNamePlates.db.profile.CBColorNotInterruptible.g, sNamePlates.db.profile.CBColorNotInterruptible.b, sNamePlates.db.profile.CBColorNotInterruptible.a)
-		end
-		self.castbarIcon.Texture:SetTexture(texture)
-		self.castbar:Show()
+local function sNamePlates_CBOnValueChanged(self, curval)
+    local minval, maxval = self:GetMinMaxValues()
+
+	if UnitChannelInfo("target") then
+        self.cbTime:SetFormattedText("%.1f", curval)
+		self.cbName:SetText(UnitChannelInfo("target"))
+    else
+        --self.time:SetFormattedText("%.1f", maxval - curval) this will make cast go from max duration to zero
+        self.cbTime:SetFormattedText("%.1f", maxval - (maxval - curval))
+		self.cbName:SetText(UnitCastingInfo("target"))
     end 
 end
 
@@ -282,8 +257,12 @@ end
 local function sNamePlates_FrameOnUpdate(self, elapsed)
 	self.elapsed = self.elapsed + elapsed
 	if self.elapsed >= 0.025 then
+
 		--Health Format
 		self:FormatHealthText()	
+		
+		self.castbar:Hide()
+		self.castbarIcon:Hide()
 
 		if ACD.OpenFrames["sNamePlates"] then
 
@@ -319,22 +298,13 @@ local function sNamePlates_FrameOnUpdate(self, elapsed)
 			self.hpPercent:SetTextColor(sNamePlates.db.profile.healthPercentColor.r, sNamePlates.db.profile.healthPercentColor.g, sNamePlates.db.profile.healthPercentColor.b, sNamePlates.db.profile.healthPercentColor.a)
 			self.hpText:SetTextColor(sNamePlates.db.profile.healthAmmountColor.r, sNamePlates.db.profile.healthAmmountColor.g, sNamePlates.db.profile.healthAmmountColor.b, sNamePlates.db.profile.healthAmmountColor.a)
 			
-			--Level
-			--Healthbar Name
-			self.level:SetFont(FetchFont(sNamePlates.db.profile.levelFont), sNamePlates.db.profile.levelFontSize, sNamePlates.db.profile.levelOutline)
-			if sNamePlates.db.profile.levelToggle then 
-				self.level:Show()
-			else
-				self.level:Hide()
-			end	 
-
 			--Raid Icon
 			self.raidIcon:SetHeight(sNamePlates.db.profile.RIheight)
 			self.raidIcon:SetWidth(sNamePlates.db.profile.RIwidth)
 			self.raidIcon:ClearAllPoints()
 			self.raidIcon:SetPoint("CENTER", self.healthbar, "CENTER", sNamePlates.db.profile.RIXOffset, sNamePlates.db.profile.RIYOffset)
 
-		 	--Cast Bar
+			--Cast Bar
 			self.castbar:SetHeight(sNamePlates.db.profile.castbarHeight)
 			self.castbar:SetWidth(sNamePlates.db.profile.nameplateWidth)
 			self.castbar:SetStatusBarTexture(FetchStatusbar(sNamePlates.db.profile.castbarTexture))
@@ -346,27 +316,25 @@ local function sNamePlates_FrameOnUpdate(self, elapsed)
 
 			self.castbar.cbTime:SetFont(FetchFont(sNamePlates.db.profile.castbarFont), sNamePlates.db.profile.castbarFontSize, sNamePlates.db.profile.castbarFontOutline)
     		self.castbar.cbTime:SetTextColor(sNamePlates.db.profile.castbarTimeColor.r, sNamePlates.db.profile.castbarTimeColor.g, sNamePlates.db.profile.castbarTimeColor.b, sNamePlates.db.profile.castbarTimeColor.a)
-			self.castbar.cbTime:SetPoint("RIGHT", self.castbar, "RIGHT", sNamePlates.db.profile.castTimeXOffset, sNamePlates.db.profile.castTimeYOffset)
 			self.castbar.cbName:SetFont(FetchFont(sNamePlates.db.profile.castbarFont), sNamePlates.db.profile.castbarFontSize, sNamePlates.db.profile.castbarFontOutline)
     		self.castbar.cbName:SetTextColor(sNamePlates.db.profile.castbarNameColor.r, sNamePlates.db.profile.castbarNameColor.g, sNamePlates.db.profile.castbarNameColor.b, sNamePlates.db.profile.castbarNameColor.a)
-			self.castbar.cbName:SetPoint("LEFT", self.castbar, "LEFT", sNamePlates.db.profile.castNameXOffset, sNamePlates.db.profile.castNameYOffset)
 			if sNamePlates.db.profile.castbarFontToggle then
 				self.castbar.cbTime:Show()
 				self.castbar.cbName:Show()
 			else
 				self.castbar.cbTime:Hide()
 				self.castbar.cbName:Hide()
-			end	 
+			end	
 
 			--Cast Bar Icon
 			self.castbarIcon:SetHeight(sNamePlates.db.profile.nameplateHeight + sNamePlates.db.profile.castbarHeight + sNamePlates.db.profile.separationValue)
 			self.castbarIcon:SetWidth(sNamePlates.db.profile.nameplateHeight + sNamePlates.db.profile.castbarHeight + sNamePlates.db.profile.separationValue)
-			self.castbarIcon:SetPoint("BOTTOMLEFT", self.castbar, "RIGHT", sNamePlates.db.profile.separationValue, -(sNamePlates.db.profile.castbarHeight/2)) 
- 
+			self.castbarIcon:SetPoint("BOTTOMLEFT", self.castbar, "RIGHT", sNamePlates.db.profile.separationValue, -(sNamePlates.db.profile.castbarHeight/2))
+
 			--Glow
 			self.hpGlow:SetBackdropBorderColor(sNamePlates.db.profile.healthbarBorderColor.r, sNamePlates.db.profile.healthbarBorderColor.g, sNamePlates.db.profile.healthbarBorderColor.b, sNamePlates.db.profile.healthbarBorderColor.a)
 			self.cbGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarBorderColor.r, sNamePlates.db.profile.castbarBorderColor.g, sNamePlates.db.profile.castbarBorderColor.b, sNamePlates.db.profile.castbarBorderColor.a)
-			self.castbarIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
+			self.cbIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
 	
 			--Target Indicator
 			self.rightIndicator:SetTexture(sNamePlates:TargetIndicatorGrabRight())
@@ -388,53 +356,6 @@ local function sNamePlates_FrameOnUpdate(self, elapsed)
 
 			self.rightIndicator:SetVertexColor(sNamePlates.db.profile.TIColor.r, sNamePlates.db.profile.TIColor.g, sNamePlates.db.profile.TIColor.b, sNamePlates.db.profile.TIColor.a)
 			self.leftIndicator:SetVertexColor(sNamePlates.db.profile.TIColor.r, sNamePlates.db.profile.TIColor.g, sNamePlates.db.profile.TIColor.b, sNamePlates.db.profile.TIColor.a)
-			
-			--Shadow under names
-			if sNamePlates.db.profile.shNameSelect  then
-				self.name:SetShadowOffset(1.25, -1.25)
-			else
-				self.name:SetShadowOffset(0, 0)
-			end
-
-			if sNamePlates.db.profile.shHealthPercentSelect  then
-				self.hpPercent:SetShadowOffset(1.25, -1.25)
-			else
-				self.hpPercent:SetShadowOffset(0, 0)
-			end
-
-			if sNamePlates.db.profile.shHealthAmmountSelect  then
-				self.hpText:SetShadowOffset(1.25, -1.25)
-			else
-				self.hpText:SetShadowOffset(0, 0)
-			end
-
-			if sNamePlates.db.profile.shLevelSelect then 
-				self.level:SetShadowOffset(1.25, -1.25)
-			else
-				self.level:SetShadowOffset(0, 0)
-			end
-			
-			if sNamePlates.db.profile.shCastbarSelect then 
-				self.castbar.cbTime:SetShadowOffset(1.25, -1.25)
-				self.castbar.cbName:SetShadowOffset(1.25, -1.25)
-			else 
-				self.castbar.cbTime:SetShadowOffset(0, 0)
-				self.castbar.cbName:SetShadowOffset(0, 0)
-			end				
-
-			--Castbar Show/Hide
-			if sNamePlates.db.profile.castbarToggle then 
-				self.castbar:Show()
-			else
-				self.castbar:Hide()
-			end
-
-			if UnitChannelInfo("target") or UnitCastingInfo("target") then
-				self.castbar:Show()
-			else
-				self.castbar:Hide()
-			end 
-
 		end
 
 	    --Healthbar
@@ -458,6 +379,10 @@ local function sNamePlates_FrameOnUpdate(self, elapsed)
 			self.hpPercent:Hide()
 			self.hpText:Hide()
 		end  
+
+		self.castbar.cbName:SetPoint("LEFT", self.castbar, "LEFT", -2, -2-(sNamePlates.db.profile.castbarHeight + self.castbar.cbTime:GetHeight())/2) 
+		self.castbar.cbTime:SetPoint("RIGHT", self.castbar, "RIGHT", 2, -2-(sNamePlates.db.profile.castbarHeight + self.castbar.cbTime:GetHeight())/2)
+
 	--[[ 		
 		--Raid Icon Color                                               **pending
 		if self.castbar then		
@@ -496,16 +421,15 @@ local function sNamePlates_FrameOnUpdate(self, elapsed)
 				self.leftIndicator:Hide()
 				self.rightIndicator:Hide()
 			end
-
-			if UnitChannelInfo("target") then
-				sNamePlates_CBSetValue(self, "channel")
-			elseif UnitCastingInfo("target") then
-				sNamePlates_CBSetValue(self, "cast")
+			
+			if UnitChannelInfo("target") or UnitCastingInfo("target") then
+				self.castbar:Show()
+				self.castbarIcon:Show()
 			end 
 		else
-			self.castbar:Hide()
 		 	self.leftIndicator:Hide()
 			self.rightIndicator:Hide() 
+
 			if targetExist then
 				if sNamePlates.db.profile.alphaToggle then
 				self:SetAlpha(sNamePlates.db.profile.alphaValue)
@@ -521,6 +445,9 @@ local function sNamePlates_UpdateFrame(self)
 	self.r, self.g, self.b, self.a = self.healthbar:GetStatusBarColor()
 	--print(self.r.." - "..self.g.." - "..self.b.." - "..self.a)
 	self.healthbar:SetStatusBarColor(sNamePlates_NameplateColoring(self.r, self.g, self.b, self.a))
+
+ 	self.castbar:Hide()
+	self.castbarIcon:Hide()
 
  	self.leftIndicator:Hide()
 	self.rightIndicator:Hide()  
@@ -594,7 +521,7 @@ local function sNamePlates_UpdateFrame(self)
 	--Glow
 	self.hpGlow:SetBackdropBorderColor(sNamePlates.db.profile.healthbarBorderColor.r, sNamePlates.db.profile.healthbarBorderColor.g, sNamePlates.db.profile.healthbarBorderColor.b, sNamePlates.db.profile.healthbarBorderColor.a)
 	self.cbGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarBorderColor.r, sNamePlates.db.profile.castbarBorderColor.g, sNamePlates.db.profile.castbarBorderColor.b, sNamePlates.db.profile.castbarBorderColor.a)
-	self.castbarIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
+	self.cbIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
 
 	--Target Indicator
 	if sNamePlates.db.profile.inverseSelect then 
@@ -625,7 +552,7 @@ local function sNamePlates_UpdateFrame(self)
 		self.level:SetTextColor(1, 0, 0)
 		self.level:Show()
 	elseif not elite and level == mylevel then
-		--self.level:Hide()
+		self.level:Hide()
 	else
 		self.level:SetText(level..(elite and "+" or ""))
 	end 
@@ -649,32 +576,17 @@ local function sNamePlates_CreateFrame(frame)
 	frame.oldname = nameTextRegion
 	frame.oldname:Hide()
 
-	castBar:SetParent(nil)
-	castBar:SetScript("OnShow", function() castBar:Hide() end)
-
-	spellIconRegion:SetHeight(0.01)
-    spellIconRegion:SetWidth(0.01)
-
 	frame.glow = glowRegion
 	
 	local newNameRegion = frame:CreateFontString()
 	newNameRegion:SetJustifyH("LEFT")
 	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, 2)
-	if sNamePlates.db.profile.shNameSelect  then
-		newNameRegion:SetShadowOffset(1.25, -1.25)
-	else
-		newNameRegion:SetShadowOffset(0, 0)
-	end
-
+	newNameRegion:SetShadowOffset(1.25, -1.25)
 	frame.name = newNameRegion
 
 	frame.level = levelTextRegion
 	frame.level:SetFont(FetchFont(sNamePlates.db.profile.levelFont), sNamePlates.db.profile.levelFontSize, sNamePlates.db.profile.levelOutline)
-	if sNamePlates.db.profile.shLevelSelect then 
-		frame.level:SetShadowOffset(1.25, -1.25)
-	else
-		frame.level:SetShadowOffset(0, 0)
-	end
+	frame.level:SetShadowOffset(1.25, -1.25)
 	frame.level:SetJustifyH("RIGHT")
     frame.level:SetJustifyV("BOTTOM")
 
@@ -699,55 +611,33 @@ local function sNamePlates_CreateFrame(frame)
 	raidIconRegion:SetWidth(sNamePlates.db.profile.RIwidth)
 	raidIconRegion:SetPoint("CENTER", frame.healthbar, "CENTER", sNamePlates.db.profile.RIXOffset, sNamePlates.db.profile.RIYOffset)
 
-	frame.castbar = CreateFrame("Statusbar", nil, frame.healthbar)
+	frame.castbar = castBar
 	frame.castbar:SetStatusBarTexture(FetchStatusbar(sNamePlates.db.profile.nameplateTexture))
-
+ 	frame.castbar:HookScript("OnSizeChanged", function(self)
+		self:SetHeight(sNamePlates.db.profile.castbarHeight)
+		self:SetWidth(sNamePlates.db.profile.nameplateWidth)
+		self:ClearAllPoints()
+			self:SetPoint("TOP", frame.healthbar, "BOTTOM", 0, -sNamePlates.db.profile.separationValue)
+	end) 
+	frame.castbar:HookScript("OnValueChanged", sNamePlates_CBOnValueChanged)
 	frame.castbar:SetHeight(sNamePlates.db.profile.castbarHeight)
 	frame.castbar:SetWidth(sNamePlates.db.profile.nameplateWidth)
 	frame.castbar:ClearAllPoints()
 	frame.castbar:SetPoint("TOP", frame.healthbar, "BOTTOM", 0, -sNamePlates.db.profile.separationValue)
-	frame.castbar:SetMinMaxValues(0, 0)
-	frame.castbar:SetValue(0)
-	frame.castbar:HookScript("OnEvent", function(self, event)
-		if event == "PLAYER_TARGET_CHANGED" then
-			self:SetMinMaxValues(0,0)
-			self:SetValue(0)
-			self:Hide()
-		elseif (event == "UNIT_SPELLCAST_CHANNEL_START" or event == "UNIT_SPELLCAST_CHANNEL_UPDATE" or event == "UNIT_SPELLCAST_START") and arg1 == "target" then 
-			self:Show()
-		elseif arg1 == "target" then
-			self:SetMinMaxValues(0,0)
-			self:SetValue(0)
-			self:Hide()
-		end
-	end)
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_STOP")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP");
-	frame.castbar:RegisterEvent("PLAYER_TARGET_CHANGED")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_FAILED")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
-	frame.castbar:RegisterEvent("UNIT_SPELLCAST_START")
-	frame.castbar:Hide()
 
- 	frame.castbarIcon = CreateFrame("Frame", nil, frame.castbar)
+	frame.castbarIcon = spellIconRegion
 	frame.castbarIcon:SetHeight(sNamePlates.db.profile.nameplateHeight + sNamePlates.db.profile.castbarHeight + sNamePlates.db.profile.separationValue)
 	frame.castbarIcon:SetWidth(sNamePlates.db.profile.nameplateHeight + sNamePlates.db.profile.castbarHeight + sNamePlates.db.profile.separationValue)
-	frame.castbarIcon:SetPoint("BOTTOMLEFT", frame.castbar, "RIGHT", sNamePlates.db.profile.separationValue, -(sNamePlates.db.profile.castbarHeight/2)) 
-
-	frame.castbarIcon.Texture = frame.castbarIcon:CreateTexture(nil, "BACKGROUND")
-	frame.castbarIcon.Texture:SetAllPoints(frame.castbarIcon)
-	frame.castbarIcon.Texture:SetTexCoord(CastbarIconScaling(frame.castbarIcon:GetWidth(),frame.castbarIcon:GetHeight()))
+	frame.castbarIcon:SetTexCoord(CastbarIconScaling(frame.castbarIcon:GetWidth(),frame.castbarIcon:GetHeight()))
+	frame.castbarIcon:SetPoint("BOTTOMLEFT", frame.castbar, "RIGHT", sNamePlates.db.profile.separationValue, -(sNamePlates.db.profile.castbarHeight/2))
 
 	frame.hpBackground = healthBar:CreateTexture(nil, "BORDER")
 	frame.hpBackground:SetAllPoints(healthBar)
 	frame.hpBackground:SetTexture(FetchStatusbar(sNamePlates.db.profile.backgroundTexture))
 	frame.hpBackground:SetVertexColor(sNamePlates.db.profile.backgroundNameplateColor.r, sNamePlates.db.profile.backgroundNameplateColor.g, sNamePlates.db.profile.backgroundNameplateColor.b, sNamePlates.db.profile.backgroundNameplateColor.a)
 
-	frame.cbBackground = frame.castbar:CreateTexture(nil, "BORDER")
-	frame.cbBackground:SetAllPoints(frame.castbar)
+	frame.cbBackground = castBar:CreateTexture(nil, "BORDER")
+	frame.cbBackground:SetAllPoints(castBar)
 	frame.cbBackground:SetTexture(FetchStatusbar(sNamePlates.db.profile.castbarBackgroundTexture))
 	frame.cbBackground:SetVertexColor(sNamePlates.db.profile.backgroundCastbarColor.r, sNamePlates.db.profile.backgroundCastbarColor.g, sNamePlates.db.profile.backgroundCastbarColor.b, sNamePlates.db.profile.backgroundCastbarColor.a)
 
@@ -765,30 +655,25 @@ local function sNamePlates_CreateFrame(frame)
 	frame.cbGlow:SetBackdropColor(sNamePlates.db.profile.castbarBorderColor.r, sNamePlates.db.profile.castbarBorderColor.g, sNamePlates.db.profile.castbarBorderColor.b, sNamePlates.db.profile.castbarBorderColor.a)
 	frame.cbGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarBorderColor.r, sNamePlates.db.profile.castbarBorderColor.g, sNamePlates.db.profile.castbarBorderColor.b, sNamePlates.db.profile.castbarBorderColor.a)
 
-	frame.castbarIconGlow = CreateFrame("Frame", nil, frame.castbar)
-	frame.castbarIconGlow:SetPoint("TOPLEFT", frame.castbarIcon, "TOPLEFT", -5, 5)
-	frame.castbarIconGlow:SetPoint("BOTTOMRIGHT", frame.castbarIcon, "BOTTOMRIGHT", 5, -5)
-    frame.castbarIconGlow:SetBackdrop(backdrop)
-    frame.castbarIconGlow:SetBackdropColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
-    frame.castbarIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
+	local castbarIconGlow = CreateFrame("Frame", nil, castBar)
+	castbarIconGlow:SetPoint("TOPLEFT", frame.castbarIcon, "TOPLEFT", -5, 5)
+	castbarIconGlow:SetPoint("BOTTOMRIGHT", frame.castbarIcon, "BOTTOMRIGHT", 5, -5)
+    castbarIconGlow:SetBackdrop(backdrop)
+    castbarIconGlow:SetBackdropColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
+    castbarIconGlow:SetBackdropBorderColor(sNamePlates.db.profile.castbarIconBorderColor.r, sNamePlates.db.profile.castbarIconBorderColor.g, sNamePlates.db.profile.castbarIconBorderColor.b, sNamePlates.db.profile.castbarIconBorderColor.a)
+    frame.cbIconGlow = castbarIconGlow
 
 	frame.castbar.cbTime = frame.castbar:CreateFontString(nil, "ARTWORK")
-    frame.castbar.cbTime:SetPoint("RIGHT", frame.castbar, "RIGHT", sNamePlates.db.profile.castTimeXOffset, sNamePlates.db.profile.castTimeYOffset)
+    frame.castbar.cbTime:SetPoint("RIGHT", frame.castbar, "RIGHT", 0, 0)
     frame.castbar.cbTime:SetFont(FetchFont(sNamePlates.db.profile.castbarFont), sNamePlates.db.profile.castbarFontSize, sNamePlates.db.profile.castbarFontOutline)
     frame.castbar.cbTime:SetTextColor(sNamePlates.db.profile.castbarTimeColor.r, sNamePlates.db.profile.castbarTimeColor.g, sNamePlates.db.profile.castbarTimeColor.b, sNamePlates.db.profile.castbarTimeColor.a)
+    frame.castbar.cbTime:SetShadowOffset(1.25, -1.25)
 
 	frame.castbar.cbName = frame.castbar:CreateFontString(nil, "ARTWORK")
-    frame.castbar.cbName:SetPoint("LEFT", frame.castbar, "LEFT", sNamePlates.db.profile.castNameXOffset, sNamePlates.db.profile.castNameYOffset)
+    frame.castbar.cbName:SetPoint("LEFT", frame.castbar, "LEFT", 0, 0)
     frame.castbar.cbName:SetFont(FetchFont(sNamePlates.db.profile.castbarFont), sNamePlates.db.profile.castbarFontSize, sNamePlates.db.profile.castbarFontOutline)
     frame.castbar.cbName:SetTextColor(sNamePlates.db.profile.castbarNameColor.r, sNamePlates.db.profile.castbarNameColor.g, sNamePlates.db.profile.castbarNameColor.b, sNamePlates.db.profile.castbarNameColor.a)
-
-	if sNamePlates.db.profile.shCastbarSelect then 
-		frame.castbar.cbTime:SetShadowOffset(1.25, -1.25)
-		frame.castbar.cbName:SetShadowOffset(1.25, -1.25)
-	else 
-		frame.castbar.cbTime:SetShadowOffset(0, 0)
-		frame.castbar.cbName:SetShadowOffset(0, 0)
-	end
+	frame.castbar.cbName:SetShadowOffset(1.25, -1.25)
 
  	local hp = CreateFrame("Frame", nil, frame.healthbar)
     hp:SetHeight(1)
@@ -798,11 +683,7 @@ local function sNamePlates_CreateFrame(frame)
 	hp.text:SetPoint("CENTER")
     hp.text:SetFont(FetchFont(sNamePlates.db.profile.healthAmmountFont), sNamePlates.db.profile.healthAmmountFontSize, sNamePlates.db.profile.healthAmmountOutline)
     hp.text:SetTextColor(sNamePlates.db.profile.healthAmmountColor.r, sNamePlates.db.profile.healthAmmountColor.g, sNamePlates.db.profile.healthAmmountColor.b, sNamePlates.db.profile.healthAmmountColor.a)
-	if sNamePlates.db.profile.shHealthAmmountSelect  then
-		hp.text:SetShadowOffset(1.25, -1.25)
-	else
-		hp.text:SetShadowOffset(0, 0)
-	end
+    hp.text:SetShadowOffset(1.25, -1.25)
     hp.text:SetJustifyH("CENTER")
     hp.text:SetJustifyV("MIDDLE")
     hp.text:Hide()
@@ -816,11 +697,7 @@ local function sNamePlates_CreateFrame(frame)
     percent.text:SetPoint("CENTER")
     percent.text:SetFont(FetchFont(sNamePlates.db.profile.healthPercentFont), sNamePlates.db.profile.healthPercentFontSize, sNamePlates.db.profile.healthPercentOutline)
     percent.text:SetTextColor(sNamePlates.db.profile.healthPercentColor.r, sNamePlates.db.profile.healthPercentColor.g, sNamePlates.db.profile.healthPercentColor.b, sNamePlates.db.profile.healthPercentColor.a)
-	if sNamePlates.db.profile.shHealthPercentSelect  then
-		percent.text:SetShadowOffset(1.25, -1.25)
-	else
-		percent.text:SetShadowOffset(0, 0)
-	end
+    percent.text:SetShadowOffset(1.25, -1.25)
     percent.text:SetJustifyH("CENTER")
     percent.text:SetJustifyV("MIDDLE")
     percent.text:Hide()
@@ -938,11 +815,6 @@ function sNamePlates:RTIColors()
 	sNamePlates.db.profile.TIColor = {["r"] = 1, ["g"] = 1, ["b"] = 1, ["a"] = 1}
 end
 
-function sNamePlates:RCBColors()
-	sNamePlates.db.profile.CBColorInterruptible = {["r"] = 0.85, ["g"] = 0.61, ["b"] = 0.15, ["a"] = 1}
-	sNamePlates.db.profile.CBColorNotInterruptible = {["r"] = 0.8, ["g"] = 0.1, ["b"] = 0.1, ["a"] = 1}
-end
-
 function sNamePlates:TargetIndicatorGrabLeft()
 	local c = sNamePlates.db.profile.tarIndicatorSelect
 	if c == 1 then
@@ -959,10 +831,6 @@ function sNamePlates:TargetIndicatorGrabLeft()
 		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\BracketLeft]]
 	elseif c == 7 then
 		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\BracketThinLeft]]
-	elseif c == 8 then
-		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\ArrowLeft]]
-	elseif c == 9 then
-		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\HelloKittyLeft]]
 	end	
 end
 
@@ -982,9 +850,5 @@ function sNamePlates:TargetIndicatorGrabRight()
 		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\BracketRight]]
 	elseif c == 7 then
 		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\BracketThinRight]]
-	elseif c == 8 then
-		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\ArrowRight]]
-	elseif c == 9 then
-		return [[Interface\AddOns\sNamePlates\Media\Textures\TargetIndicator\HelloKittyRight]]
 	end	
 end
