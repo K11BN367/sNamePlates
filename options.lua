@@ -243,8 +243,8 @@ sNamePlates.options = {
                 }, 
                 inverseSelect = {
                     type = "select",
-                    name = "Indicator",
-                    desc = "Defines the target indicator.",
+                    name = "Inverse",
+                    desc = "Inevers the target indicator.",
                     order = 7,
                     values = {
                         [true] = "Yes",
